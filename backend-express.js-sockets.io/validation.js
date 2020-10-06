@@ -1,5 +1,5 @@
 // validation
-const Joi = require('@hapi/joi');
+const Joi = require('joi');
 
 
 // User register validation
