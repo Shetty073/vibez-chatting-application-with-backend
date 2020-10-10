@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const { chatSchema } = require('./chat').schema;
+const { groupSchema } = require('./group').schema;
 
 const userSchema = new Schema({
     name: {
@@ -15,15 +17,33 @@ const userSchema = new Schema({
         min: 6,
         max: 255,
     },
+    phone: {
+        type: String,
+        required: true,
+        unique: true
+    },
     password: {
         type: String,
         required: true,
         min: 6,
         max: 1024,
     },
-    date: {
+    joindate: {
         type: Date,
         default: Date.now
+    },
+    lastseen: {
+        type: Date
+    },
+    chats: {
+        type: [chatSchema]
+    },
+    groups: {
+        type: [groupSchema]
+    },
+    isBot: {
+        type: Boolean,
+        default: false
     }
 });
 

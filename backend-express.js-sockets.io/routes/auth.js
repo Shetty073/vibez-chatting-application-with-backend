@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { registerDataValidation, loginDataValidation } = require('../validation');
-const { verifyAuthToken } = require('../verifytoken');
 
 
 // endpoints
@@ -81,20 +80,5 @@ router.post('/login', async (req, res) => {
     });
 });
 
-
-// temp route for testing jwt functionality
-router.post('/testjwtaccess', verifyAuthToken, (req, res) => {
-    res.send(req.user);
-
-    /*
-    If the auth-token header has valid jsonwebtoken then the following response will be displayed to client
-
-    {
-        "_id": "5f7c653061fb380bec53eeca",
-        "iat": 1601990959
-    }
-
-    */
-});
 
 module.exports = router;
