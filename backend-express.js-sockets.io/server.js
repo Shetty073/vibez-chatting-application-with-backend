@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
@@ -43,7 +45,7 @@ app.use(function(req, res, next) {
 const PORT = process.env.PORT || 3000
 
 // Start the server
-app.listen(PORT, () => {
+http.listen(PORT, () => {
     console.log(`Server started on http://localhost:${PORT}`)
 })
 
