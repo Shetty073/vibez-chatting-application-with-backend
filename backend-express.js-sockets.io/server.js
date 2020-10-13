@@ -99,6 +99,5 @@ const PORT = process.env.PORT || 3000;
 
 // Start the server
 http.listen(PORT, () => {
-    console.log(`Server started on http://localhost:${PORT}`)
-})
-
+    console.log(`Server started on http://192.168.1.100:${PORT}`)
+});

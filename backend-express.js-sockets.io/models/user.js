@@ -33,13 +33,16 @@ const userSchema = new Schema({
         default: Date.now
     },
     lastseen: {
-        type: Date
+        type: Date,
+        required: false
     },
     chats: {
-        type: [chatSchema]
+        type: [chatSchema],
+        required: false
     },
     groups: {
-        type: [groupSchema]
+        type: [groupSchema],
+        required: false
     },
     isBot: {
         type: Boolean,
