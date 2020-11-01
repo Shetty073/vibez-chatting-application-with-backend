@@ -7,4 +7,5 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
     <string name="sign_up">Sign Up</string>
+    <string name="person_chatting_image">Person chatting image</string>
 </resources>
