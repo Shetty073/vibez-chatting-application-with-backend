@@ -5,8 +5,9 @@ const Joi = require('joi');
 // User register validation
 const registerDataValidation = (reqBody) => {
     const schema = Joi.object({
-        name: Joi.string().min(6).required(),
+        name: Joi.string().min(3).required(),
         email: Joi.string().min(6).required().email(),
+        phone: Joi.string().required(),
         password: Joi.string().min(6).required()
     });
 

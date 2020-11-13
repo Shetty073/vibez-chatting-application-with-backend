@@ -97,5 +97,13 @@
             android:textSize="15sp">
 
         </Button>
+
+        <ProgressBar
+            android:id="@+id/progressBarSignUp"
+            style="?android:attr/progressBarStyle"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp" />
     </LinearLayout>
 </FrameLayout>

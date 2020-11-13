@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { registerDataValidation, loginDataValidation } = require('../validation');
+const { verifyAuthToken } = require('../verifytoken');
 
 
 // endpoints
@@ -29,13 +30,14 @@ router.post('/register', async (req, res) => {
     const user = new User({
         name: req.body.name,
         email: req.body.email,
+        phone: req.body.phone,
         password: hashedPassword
     });
 
     try {
         const savedUser = await user.save();
         const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-        return res.header('auth-token', token).json({
+        return res.header('Authorization', token).json({
             success: true,
             userId: savedUser._id
         });
@@ -75,10 +77,17 @@ router.post('/login', async (req, res) => {
 
     // If the password matches create jsonwebtoken and send it back via header
     const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-    res.header('auth-token', token).json({
+    res.header('Authorization', token).json({
         success: true
     });
 });
 
+// ! Temporary endpoints for testing purposes only
+router.post('/testjwtaccess', verifyAuthToken, (req, res) => {
+    res.status(200).json({
+        success: true,
+        user: req.user
+    });
+});
 
 module.exports = router;

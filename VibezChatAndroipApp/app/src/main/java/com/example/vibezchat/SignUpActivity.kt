@@ -6,13 +6,18 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.vibezchat.databinding.ActivitySignUpBinding
+import com.example.vibezchat.models.UserSignUpModel
+import com.example.vibezchat.signuphelper.SignUpHelper
 
 class SignUpActivity : AppCompatActivity() {
-    private var name: String? = null
-    private var email: String? = null
-    private var phone: String? = null
-    private var passwordOne: String? = null
-    private var passwordTwo: String? = null
+
+    private lateinit var name: String
+    private lateinit var email: String
+    private lateinit var phone: String
+    private lateinit var passwordOne: String
+    private lateinit var passwordTwo: String
+
+    private lateinit var userSignUpModel: UserSignUpModel
 
     private lateinit var binding: ActivitySignUpBinding
 
@@ -22,14 +27,16 @@ class SignUpActivity : AppCompatActivity() {
 
         // Setup the View Binding for this activity
         binding = ActivitySignUpBinding.inflate(layoutInflater)
-        val view: View = binding!!.root
+        val view: View = binding.root
         setContentView(view)
 
         // We can now directly access Views without explicitly calling findViewById()
         binding.btnSignUp.setOnClickListener {
+            binding.progressBarSignUp.visibility = View.VISIBLE
             getDataFromFields()
             validateFormData()
         }
+
     }
 
     private fun getDataFromFields() {
@@ -42,23 +49,26 @@ class SignUpActivity : AppCompatActivity() {
 
 
     private fun validateFormData() {
-        if (name!!.isEmpty()) {
-            Toast.makeText(this, "Name can not be empty", Toast.LENGTH_SHORT).show()
-        }
-        if (email!!.isEmpty()) {
-            Toast.makeText(this, "Email can not be empty", Toast.LENGTH_SHORT).show()
-        }
-        if (phone!!.isEmpty()) {
-            Toast.makeText(this, "Phone no. can not be empty", Toast.LENGTH_SHORT).show()
-        }
-        if (passwordOne!!.isEmpty()) {
-            Toast.makeText(this, "Password can not be empty", Toast.LENGTH_SHORT).show()
-        }
-        if (passwordTwo!!.isEmpty()) {
-            Toast.makeText(this, "Password can not be empty", Toast.LENGTH_SHORT).show()
-        }
-        if (passwordOne != passwordTwo) {
+        if (name.length < 3) {
+            Toast.makeText(this, "Name should be at least 3 characters long", Toast.LENGTH_SHORT).show()
+        } else if (email.length < 6) {
+            Toast.makeText(this, "Email should be at least 6 characters long", Toast.LENGTH_SHORT).show()
+        } else if (phone.length < 6) {
+            Toast.makeText(this, "Phone no. should be at least 6 characters long", Toast.LENGTH_SHORT).show()
+        } else if (passwordOne.length < 6) {
+            Toast.makeText(this, "Password should be at least 6 characters long", Toast.LENGTH_SHORT).show()
+        } else if (passwordTwo.length < 6) {
+            Toast.makeText(this, "Password should be at least 6 characters long", Toast.LENGTH_SHORT).show()
+        } else if (passwordOne != passwordTwo) {
             Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
+        } else {
+            // Create the userSignUpModel object
+            userSignUpModel = UserSignUpModel(name, email, phone, passwordOne)
+
+            // Make the signup request
+            SignUpHelper.userSignUpModel = userSignUpModel
+            SignUpHelper.signUp()
+            binding.progressBarSignUp.visibility = View.INVISIBLE
         }
     }
 }
