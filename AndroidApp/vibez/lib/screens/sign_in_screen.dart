@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:vibez/models/helper/auth_helper.dart';
+import 'package:vibez/widgets/dialog_boxes.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -8,10 +11,17 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> with SingleTickerProviderStateMixin {
   Animation animation;
   AnimationController animationController;
+  TextEditingController _emailController, _passwordController;
+  AuthHelper _authHelper;
+  bool _isLoading;
 
   @override
   void initState() {
     super.initState();
+
+    _isLoading = false;
+
+    // Fade animations
     animationController = AnimationController(
       duration: Duration(seconds: 1),
       vsync: this,
@@ -23,6 +33,42 @@ class _SignInScreenState extends State<SignInScreen> with SingleTickerProviderSt
       ),
     );
     animationController.forward();
+
+    // initialize AuthHelper
+    _authHelper = AuthHelper();
+
+    // initialize TextEditingControllers
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
+  // function for handling signin
+  void handleSignIn() async {
+    // show loading icon
+    setState(() {
+      _isLoading = true;
+    });
+
+    Map<String, String> data = {
+      'email': _emailController.text,
+      'password': _passwordController.text,
+    };
+
+    // perform signUp()
+    _authHelper.signIn(data: data).then((value) {
+      if(value['userId'] != null) {
+        // Go to home
+        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+      } else {
+        // stop loading indicator
+        setState(() {
+          _isLoading = false;
+
+          // display error message
+          DialogBoxes.infoBox(context, 'Error', value['message']);
+        });
+      }
+    });
   }
 
   @override
@@ -92,7 +138,32 @@ class _SignInScreenState extends State<SignInScreen> with SingleTickerProviderSt
                   child: SingleChildScrollView(
                     child: Padding(
                       padding: EdgeInsets.all(30.0),
-                      child: Column(
+                      child: _isLoading ? Container(
+                        margin: EdgeInsets.only(top: (0.15 * screenHeight)),
+                        child: Column(
+                          children: [
+                            Center(
+                              child: SpinKitWave(
+                                size: (0.06 * screenWidth),
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 25.0,
+                            ),
+                            Text(
+                              'Signing in...',
+                              style: TextStyle(
+                                color: Theme.of(context).textTheme.bodyText1.color,
+                                fontWeight: FontWeight.w500,
+                                fontSize: (0.04 * screenWidth),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                          :
+                      Column(
                         children: [
                           SizedBox(
                             height: (0.05 * screenHeight),
@@ -121,6 +192,7 @@ class _SignInScreenState extends State<SignInScreen> with SingleTickerProviderSt
                                       ),
                                     ),
                                     child: TextField(
+                                      controller: _emailController,
                                       decoration: InputDecoration(
                                         hintText: 'Email',
                                         hintStyle: TextStyle(color: Colors.grey),
@@ -138,6 +210,8 @@ class _SignInScreenState extends State<SignInScreen> with SingleTickerProviderSt
                                       ),
                                     ),
                                     child: TextField(
+                                      controller: _passwordController,
+                                      obscureText: true,
                                       decoration: InputDecoration(
                                         hintText: 'Password',
                                         hintStyle: TextStyle(color: Colors.grey),
@@ -174,7 +248,7 @@ class _SignInScreenState extends State<SignInScreen> with SingleTickerProviderSt
                                 ),
                               ),
                               onTap: () {
-                                // TODO: Sign In
+                                handleSignIn();
                               },
                             ),
                           ),

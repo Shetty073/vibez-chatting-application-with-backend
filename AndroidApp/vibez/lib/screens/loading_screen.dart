@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:vibez/models/helper/secure_storage_helper.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -9,14 +9,15 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  final storage = new FlutterSecureStorage();
+  final secureStorageHelper = SecureStorageHelper();
 
   void getToken() async {
-    String token = await storage.read(key: 'token');
+    String token = await secureStorageHelper.readVal(key: 'authToken');
     if(token == null) {
-      Navigator.pushReplacementNamed(context, '/sign_in');
+      // Navigator.pushReplacementNamed(context, '/sign_in');
+      Navigator.pushNamedAndRemoveUntil(context, '/sign_in', (route) => false);
     } else {
-      Navigator.pushReplacementNamed(context, '/');
+      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
     }
   }
 

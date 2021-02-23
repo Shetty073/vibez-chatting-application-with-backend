@@ -42,6 +42,7 @@ router.post("/register", async (req, res) => {
     try {
         const savedUser = await user.save();
         const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
+
         return res.header("Authorization", token).json({
             success: true,
             userId: savedUser._id,
@@ -74,6 +75,7 @@ router.post("/login", async (req, res) => {
 
     // Check if the password matches
     const validPass = await bcrypt.compare(req.body.password, user.password);
+
     // If the password doesn't match send error message
     if (!validPass)
         return res.status(400).json({
@@ -83,8 +85,10 @@ router.post("/login", async (req, res) => {
 
     // If the password matches create jsonwebtoken and send it back via header
     const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
+
     res.header("Authorization", token).json({
         success: true,
+        userId: user._id,
     });
 });
 
