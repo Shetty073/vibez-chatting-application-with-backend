@@ -1,18 +1,18 @@
-import 'package:animations/animations.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:vibez/screens/new_chat_screen.dart';
+import 'package:flutter/services.dart';
 
-class HomeScreen extends StatefulWidget {
+
+class NewChatScreen extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _NewChatScreenState createState() => _NewChatScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+class _NewChatScreenState extends State<NewChatScreen> with SingleTickerProviderStateMixin {
+  TextEditingController _searchController;
   Animation animation;
   AnimationController animationController;
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
-  List<int> _items = [1, 3, 6, 8, 9];
+  List<int> _items = [12, 33, 26, 87, 93];
   int counter = 0;
 
   @override
@@ -39,6 +39,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     );
     animationController.forward();
 
+    // TextEditingController
+    _searchController = TextEditingController();
+
     super.initState();
   }
 
@@ -56,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       ).animate(animation),
 
       child: SizedBox(
-        height: (0.16 * screenHeight),
+        height: (0.14 * screenHeight),
         child: Card(
           elevation: 0.0,
           color: Colors.white70,
@@ -97,13 +100,47 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     FadeTransition(
                       opacity: animationController.drive(CurveTween(curve: Curves.easeOut)),
                       child: Text(
-                        'Chats',
+                        'New Chat',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: (0.09 * screenWidth),
                           fontWeight: FontWeight.w800,
                         ),
                       ),
+                    ),
+                    SizedBox(
+                      height: (0.02 * screenHeight),
+                    ),
+                    TextField(
+                      controller: _searchController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(left: 5.0, right: 5.0, top: 2.0, bottom: 2.0),
+                        hintText: 'Search user@example.com',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        fillColor: Colors.white,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            FocusManager.instance.primaryFocus.unfocus();
+                            print('Search');
+                            // _searchUser()
+                          },
+                        ),
+                      ),
+                      style: TextStyle(
+                        fontSize: 20.0,
+                      ),
+                      onEditingComplete: () {
+                        FocusManager.instance.primaryFocus.unfocus();
+                        print('Search Editing Complete');
+                        // _searchUser()
+                      },
                     ),
                   ],
                 ),
@@ -126,20 +163,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               ),
             ],
           ),
-        ),
-        floatingActionButton: OpenContainer(
-          closedBuilder: (_, openContainer) {
-            return FloatingActionButton(
-              child: Icon(
-                Icons.message,
-              ),
-              backgroundColor: Theme.of(context).primaryColor,
-              onPressed: openContainer,
-            );
-          },
-          openBuilder: (_, closeContainer) {
-            return NewChatScreen();
-          },
         ),
       ),
     );

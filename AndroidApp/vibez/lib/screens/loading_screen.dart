@@ -23,14 +23,16 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   @override
   void initState() {
-    super.initState();
     getToken();
+
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(

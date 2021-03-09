@@ -16,9 +16,18 @@ class _SignInScreenState extends State<SignInScreen> with SingleTickerProviderSt
   bool _isLoading;
 
   @override
-  void initState() {
-    super.initState();
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    _emailController.dispose();
+    _passwordController.dispose();
+    animationController.dispose();
 
+    super.dispose();
+  }
+
+  @override
+  void initState() {
     _isLoading = false;
 
     // Fade animations
@@ -40,6 +49,8 @@ class _SignInScreenState extends State<SignInScreen> with SingleTickerProviderSt
     // initialize TextEditingControllers
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+
+    super.initState();
   }
 
   // function for handling signin
@@ -75,6 +86,7 @@ class _SignInScreenState extends State<SignInScreen> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
     return SafeArea(
       child: Scaffold(
         body: Container(

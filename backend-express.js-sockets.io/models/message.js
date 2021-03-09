@@ -10,13 +10,9 @@ const chatSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: "User",
         },
-        chat: {
+        replyTo: {
             type: Schema.Types.ObjectId,
-            ref: "Chat",
-        },
-        group: {
-            type: Schema.Types.ObjectId,
-            ref: "Group",
+            ref: "Message",
         },
     },
     {

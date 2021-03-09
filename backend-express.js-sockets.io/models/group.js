@@ -13,6 +13,12 @@ const groupSchema = new Schema(
                 ref: "User",
             },
         ],
+        messages: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Message",
+            },
+        ],
     },
     {
         timestamps: true,
